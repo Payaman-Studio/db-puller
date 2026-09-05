@@ -2,23 +2,7 @@
 
 Interactive CLI to pull SQLite databases from Android apps via ADB — pick device, app, and database with `fzf`, and get an instant integrity check without typing `adb shell run-as` commands by hand.
 
-```
-+-- Device ----------------------+  +-- App & Database --------------+
-| Brand : Samsung                |  | App  : MYAPP                    |
-| Model : SM-G991B               |  | Pkg  : com.example.myapp        |
-| Serial: a1b2c3d4e5f6            |  | DB   : app.db                   |
-+---------------------------------+  +---------------------------------+
-
-[####################] 100%  692 KB/692 KB  0 KB/s  ETA --
-
-+------------------------------------------------------------------+
-| OK   Done in 0s                                                   |
-|      Size        692 KB                                          |
-|      Tables      14                                              |
-|      Integrity   ok                                              |
-|      -> app.db                                                   |
-+------------------------------------------------------------------+
-```
+<img width="1120" height="1071" alt="screenshot" src="https://github.com/user-attachments/assets/5ac83c1c-c436-4630-a938-9cdb9dff14dd" />
 
 ## Why
 
