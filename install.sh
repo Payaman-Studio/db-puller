@@ -2,6 +2,8 @@
 set -e
 
 REPO_RAW="https://raw.githubusercontent.com/Payaman-Studio/db-puller/main"
+INSTALL_DIR="$HOME/.local/bin"
+INSTALL_PATH="$INSTALL_DIR/db-puller"
 
 echo "Installing db-puller..."
 
@@ -11,25 +13,21 @@ for CMD in adb fzf; do
     fi
 done
 
-if [ -w "/usr/local/bin" ]; then
-    INSTALL_PATH="/usr/local/bin/db-puller"
-    curl -fsSL "$REPO_RAW/db-puller.sh" -o "$INSTALL_PATH"
-elif command -v sudo >/dev/null 2>&1; then
-    INSTALL_PATH="/usr/local/bin/db-puller"
-    curl -fsSL "$REPO_RAW/db-puller.sh" | sudo tee "$INSTALL_PATH" >/dev/null
-else
-    mkdir -p "$HOME/.local/bin"
-    INSTALL_PATH="$HOME/.local/bin/db-puller"
-    curl -fsSL "$REPO_RAW/db-puller.sh" -o "$INSTALL_PATH"
-fi
-
+mkdir -p "$INSTALL_DIR"
+curl -fsSL "$REPO_RAW/db-puller.sh" -o "$INSTALL_PATH"
 chmod +x "$INSTALL_PATH"
 
 echo "Installed to $INSTALL_PATH"
 
 case ":$PATH:" in
-    *":$(dirname "$INSTALL_PATH"):"*) ;;
-    *) echo "Note: $(dirname "$INSTALL_PATH") is not in your PATH. Add it to your shell profile." ;;
+    *":$INSTALL_DIR:"*) ;;
+    *)
+        echo ""
+        echo "Note: $INSTALL_DIR is not in your PATH."
+        echo "Add this to your shell profile (~/.zshrc or ~/.bashrc):"
+        echo "  export PATH=\"\$HOME/.local/bin:\$PATH\""
+        ;;
 esac
 
+echo ""
 echo "Run it with: db-puller"
