@@ -4,9 +4,9 @@ Interactive CLI to pull SQLite databases from Android apps via ADB — pick devi
 
 ```
 +-- Device ----------------------+  +-- App & Database --------------+
-| Brand : Xiaomi                 |  | App  : FMSMOBILE                |
-| Model : 21081111RG             |  | Pkg  : com.ggfsystem.fmsmob..   |
-| Serial: gy79zttckfqsxw4t       |  | DB   : fms.ggfsystems.db        |
+| Brand : Samsung                |  | App  : MYAPP                    |
+| Model : SM-G991B               |  | Pkg  : com.example.myapp        |
+| Serial: a1b2c3d4e5f6            |  | DB   : app.db                   |
 +---------------------------------+  +---------------------------------+
 
 [####################] 100%  692 KB/692 KB  0 KB/s  ETA --
@@ -16,7 +16,7 @@ Interactive CLI to pull SQLite databases from Android apps via ADB — pick devi
 |      Size        692 KB                                          |
 |      Tables      14                                              |
 |      Integrity   ok                                              |
-|      -> fms.ggfsystems.db                                        |
+|      -> app.db                                                   |
 +------------------------------------------------------------------+
 ```
 
@@ -43,13 +43,13 @@ Debugging app data on Android usually means a chain of manual commands: find the
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<user>/db-puller/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Payaman-Studio/db-puller/main/install.sh | bash
 ```
 
 Or manually:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<user>/db-puller/main/db-puller.sh -o /usr/local/bin/db-puller
+curl -fsSL https://raw.githubusercontent.com/Payaman-Studio/db-puller/main/db-puller.sh -o /usr/local/bin/db-puller
 chmod +x /usr/local/bin/db-puller
 ```
 
