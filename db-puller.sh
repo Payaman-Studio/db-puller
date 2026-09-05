@@ -50,6 +50,7 @@ box_top()    { printf "${C_CYAN}+%s+${C_RESET}\n" "$(dashes "$INNER")"; }
 box_bottom() { printf "${C_CYAN}+%s+${C_RESET}\n" "$(dashes "$INNER")"; }
 box_line()   { printf "${C_CYAN}|${C_RESET} %s ${C_CYAN}|${C_RESET}\n" "$(pad_to "$1" $((INNER - 2)))"; }
 box_blank()  { box_line ""; }
+step_header() { printf "\n  ${C_BOLD}[%s/4] %s${C_RESET}\n\n" "$1" "$2"; }
 
 # --- ASCII logo ------------------------------------------------------------
 
@@ -137,6 +138,7 @@ draw_progress() {
 clear
 draw_logo
 
+step_header 1 "Pilih Device"
 DEVICE_LIST=$(adb devices | awk 'NR>1 && $2=="device" {print $1}')
 if [ -z "$DEVICE_LIST" ]; then
     printf "  ${C_RED}X${C_RESET}  Tidak ada device terhubung via ADB.\n\n"
@@ -147,7 +149,6 @@ COUNT=$(echo "$DEVICE_LIST" | wc -l | tr -d ' ')
 if [ "$COUNT" -eq 1 ]; then
     SELECTED="$DEVICE_LIST"
 else
-    printf "  ${C_BOLD}Pilih Device${C_RESET}\n\n"
     i=1
     while IFS= read -r SERIAL; do
         M=$(adb -s "$SERIAL" shell getprop ro.product.model 2>/dev/null | tr -d '\r')
@@ -163,6 +164,7 @@ fi
 BRAND=$(adb -s "$SELECTED" shell getprop ro.product.brand 2>/dev/null | tr -d '\r')
 MODEL=$(adb -s "$SELECTED" shell getprop ro.product.model 2>/dev/null | tr -d '\r')
 
+step_header 2 "Pilih App"
 RAW_PACKAGES=$(adb -s "$SELECTED" shell pm list packages --user cur -3 2>/dev/null | grep '^package:' | cut -d: -f2 | tr -d '\r')
 [ -z "$RAW_PACKAGES" ] && RAW_PACKAGES=$(adb -s "$SELECTED" shell pm list packages -3 2>/dev/null | grep '^package:' | cut -d: -f2 | tr -d '\r')
 
@@ -179,6 +181,7 @@ SELECTED_ENTRY=$(echo -e "$APP_LIST" | grep -v '^$' | fzf --height 40% --layout=
 PACKAGE_NAME=$(echo "$SELECTED_ENTRY" | awk -F '|' '{print $NF}' | xargs)
 APP_LABEL=$(echo "$SELECTED_ENTRY" | awk -F '|' '{print $1}' | xargs)
 
+step_header 3 "Pilih Database"
 RAW_DBS=$(adb -s "$SELECTED" shell run-as "$PACKAGE_NAME" ls databases/ 2>/dev/null | tr -d '\r')
 VALID_DBS=""
 while IFS= read -r DB; do
@@ -199,6 +202,7 @@ else
 fi
 [ -z "$DB_NAME" ] && exit 1
 
+step_header 4 "Download Database"
 draw_two_columns "$BRAND" "$MODEL" "$SELECTED" "$APP_LABEL" "$PACKAGE_NAME" "$DB_NAME"
 
 REMOTE_SIZE=$(adb -s "$SELECTED" shell run-as "$PACKAGE_NAME" stat -c%s "databases/$DB_NAME" 2>/dev/null | tr -d '\r\n')
